@@ -24,8 +24,8 @@ void handler() {
 // check flag
 int client_boardcast(message_p msg, int sender) {
     for (int i = 1; i <= MAX_CLIENT; i++) {
-        // if (room[i].client_box != NULL && i != sender) { 
-        if (room[i].client_box != NULL) { 
+        if (room[i].client_box != NULL && i != sender) { 
+        // if (room[i].client_box != NULL) { 
             messagebox_send(room[i].client_box, msg);
         }
     }
