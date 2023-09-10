@@ -9,13 +9,11 @@
 #include <sys/shm.h>
 #include <unistd.h>
 
-
-#define SHNAME "shm"
+// SHNAME must refer to an existing, accessible file
+#define SHNAME     "/tmp"
 #define IDENTIFIER 'R'
 
-#define TEST_LOOPS 1000
+void run_server(char *shm_memory, int msg_size, int msg_count);
+void run_client(char *shm_memory, int msg_size, int msg_count);
 
-void run_server(char* shm_memory, int size);
-void run_client(char *shm_memory, int size);
-
-#endif 
+#endif

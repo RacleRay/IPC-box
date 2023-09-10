@@ -1,5 +1,5 @@
-#ifndef _IPC_SIGNALS_
-#define _IPC_SIGNALS_
+#ifndef _IPC_SIGNALS_H_
+#define _IPC_SIGNALS_H_
 
 #include <signal.h>
 #include <stdio.h>
@@ -15,15 +15,10 @@
 
 void signal_handler(int signal);
 
-sigset_t setup_signals(struct sigaction *signal_action, int flags);
+sigset_t setup_signals(struct sigaction *new_sa, int flags);
 sigset_t setup_parent_signals();
-sigset_t setup_server_signals(struct sigaction *signal_action);
-sigset_t setup_client_signals(struct sigaction *signal_action);
-
-void notify_server();
-void notify_client();
-
-void wait_for_signal(struct sigaction *signal_action);
+sigset_t setup_server_signals(struct sigaction *new_sa);
+sigset_t setup_client_signals(struct sigaction *new_sa);
 
 void client_once(int operation);
 void server_once(int operation);

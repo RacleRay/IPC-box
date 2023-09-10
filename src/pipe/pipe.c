@@ -25,13 +25,13 @@ FILE* open_stream(int file_descriptor[2], char mode, int endian) {
 }
 
 
-void run_server(int file_descriptor[2], int size, pid_t client_pid) {
+void run_server(int file_descriptor[2], int msg_size, int msg_count, pid_t client_pid) {
     struct sigaction signal_action;
     void* buf;
     FILE* stream;
 
     stream = open_stream(file_descriptor, 'w', 1);
-    buf = malloc(size);
+    buf = malloc(msg_size);
 
     // block SIGUSR1, ignore SIGUSR2
     sigset_t oset = setup_server_signals(&signal_action);
@@ -41,8 +41,8 @@ void run_server(int file_descriptor[2], int size, pid_t client_pid) {
 
     printf("start pipe server test\n");
     // while (1) {
-    for (int i = 0; i < TEST_LOOPS; i++) {
-        if (fwrite(buf, size, 1, stream) == -1) {
+    for (int i = 0; i < msg_count; i++) {
+        if (fwrite(buf, msg_size, 1, stream) == -1) {
             err_sys("Can`t write to pipe.");
         }
         (void)fflush(stream);
@@ -61,13 +61,13 @@ void run_server(int file_descriptor[2], int size, pid_t client_pid) {
 }
 
 
-void run_client(int file_descriptor[2], int size, pid_t server_pid) {
+void run_client(int file_descriptor[2], int msg_size, int msg_count, pid_t server_pid) {
     struct sigaction signal_action;
     FILE* stream;
     void* buf;
 
     stream = open_stream(file_descriptor, 'r', 0);
-    buf = malloc(size);
+    buf = malloc(msg_size);
 
     sigset_t oset = setup_client_signals(&signal_action);
 
@@ -78,10 +78,10 @@ void run_client(int file_descriptor[2], int size, pid_t server_pid) {
 
     int signo;
     // while (1) {
-    for (int i = 0; i < TEST_LOOPS; i++) {
+    for (int i = 0; i < msg_count; i++) {
         sigwait(&signal_action.sa_mask, &signo);
 
-        if (fwrite(buf, size, 1, stream) == -1) {
+        if (fwrite(buf, msg_size, 1, stream) == -1) {
             err_sys("Can`t read from pipe.");
         }
 
@@ -99,7 +99,7 @@ void run_client(int file_descriptor[2], int size, pid_t server_pid) {
 int main(int argc, char *argv[]) {
     int pipefd[2];
 
-    struct Arguments args;
+    struct arguments args;
     parse_arguments(&args, argc, argv);
 
     if (pipe(pipefd) < 0) {
@@ -113,11 +113,11 @@ int main(int argc, char *argv[]) {
     }
 
     if (pid == 0) { // child
-        run_client(pipefd, args.size, getppid());
+        run_client(pipefd, args.msg_size, args.msg_count, getppid());
     }
 
     // parent
-    run_server(pipefd, args.size, pid);
+    run_server(pipefd, args.msg_size, args.msg_count, pid);
 
     wait(NULL);
     return 0;

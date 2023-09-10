@@ -3,15 +3,17 @@
 
 
 int main(int argc, char *argv[]) {
-    struct Arguments args;
+    struct arguments args;
     parse_arguments(&args, argc, argv);
 
     int shm_id;
     key_t shm_key;
+    
+    // ftok: SHNAME must refer to an existing, accessible file
     shm_key = ftok(SHNAME, IDENTIFIER);
     printf("Key: %d\n", shm_key);
 
-    shm_id = shmget(shm_key, args.size + 1, IPC_CREAT |0666);
+    shm_id = shmget(shm_key, args.msg_size + 1, IPC_CREAT |0666);
     if (shm_id < 0) {
         err_sys("Can`t allocate shared memory");
     }
@@ -23,7 +25,7 @@ int main(int argc, char *argv[]) {
     }
 
     // communicate
-    run_client(shm_memory, args.size);
+    run_client(shm_memory, args.msg_size, args.msg_count);
 
     // clean up
     shmdt(shm_memory);

@@ -2,14 +2,14 @@
 
 static void err_doit(int errnoflag, int error, const char *fmt, va_list ap);
 
-void parse_arguments(Arguments *args, int argc, char **argv) {
+void parse_arguments(arguments_t *args, int argc, char **argv) {
     int long_idx = 0;
     int option;
 
     optind = 0;
 
-    args->size = DEFAULT_SIZE;
-    args->count = DEFAULT_COUNT;
+    args->msg_size = DEFAULT_SIZE;
+    args->msg_count = DEFAULT_COUNT;
 
     // clang-format off
     static struct option long_options[] = {
@@ -25,10 +25,10 @@ void parse_arguments(Arguments *args, int argc, char **argv) {
             case -1:
                 return;
             case 's':
-                args->size = atoi(optarg);
+                args->msg_size = atoi(optarg);
                 break;
             case 'c':
-                args->count = atoi(optarg);
+                args->msg_count = atoi(optarg);
                 break;
             default:
                 continue;

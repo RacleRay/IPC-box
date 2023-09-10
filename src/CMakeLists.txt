@@ -3,10 +3,11 @@ add_compile_options(-g -O3 -Wall -Werror)
 link_libraries(pthread)
 
 
+add_subdirectory(utils)
 add_subdirectory(shm)
 add_subdirectory(shm_chat)
-# add_subdirectory(utils)
-
+add_subdirectory(pipe)
+add_subdirectory(fifo)
 
 
 # for each "src/x.cpp", generate target "x"
@@ -18,5 +19,5 @@ add_subdirectory(shm_chat)
 #     # string(REGEX REPLACE ".cpp" "" target_name ${target_name})
 #     string(REGEX REPLACE ".c" "" target_name ${target_name})
 
-#     add_executable(${target_name} ${v} utils.c shm_slave.c shm_master.c)
+#     add_executable(${target_name} ${v})
 # endforeach()

@@ -25,16 +25,15 @@
 
 #define PROMPT_SIZE 16
 
-
 #define EOT 4   // in telecommunication, EOT means "End-of-Transmission character". 
 #define DEL 127 // ascii code of backspace
 
 #define required_argument 1
 
-typedef struct Arguments {
-    int size;
-    int count; // for benchmark test
-} Arguments;
+typedef struct arguments {
+    int msg_size;
+    int msg_count; // for test
+} arguments_t;
 
 typedef struct t_line_buffer {
     char buf[MAXLINE]; // line of text to read
@@ -44,7 +43,7 @@ typedef struct t_line_buffer {
     // int end_of_input;
 } line_buf_t;
 
-void parse_arguments(Arguments *args, int argc, char **argv);
+void parse_arguments(arguments_t *args, int argc, char **argv);
 
 void err_exit(int, const char *, ...) __attribute__((noreturn));
 void err_sys(const char *, ...) __attribute__((noreturn));
@@ -57,6 +56,6 @@ void linebuf_reset(line_buf_t *line_buf);
 void linebuf_set_prompt(line_buf_t *line_buf, char *prompt);
 void linebuf_get_char(line_buf_t *line_buf);
 void linebuf_print(line_buf_t *line_buf, char *fmt, ...);
-// =============================================
+// =============================================================
 
 #endif

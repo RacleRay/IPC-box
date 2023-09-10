@@ -8,8 +8,8 @@ static inline void shm_notify(atomic_char *guard, char message) {
     atomic_store(guard, message);
 }
 
-void run_server(char *shm_memory, int size) {
-    void *buf = malloc(size);
+void run_server(char *shm_memory, int msg_size, int msg_count) {
+    void *buf = malloc(msg_size);
 
     atomic_char *guard = (atomic_char *)shm_memory;
 
@@ -17,14 +17,14 @@ void run_server(char *shm_memory, int size) {
     
     printf("Start shm server test loops\n");
     // while (1) {
-    for (int i = 0; i < TEST_LOOPS; ++i) {
+    for (int i = 0; i < msg_count; ++i) {
         // test
-        memset(shm_memory + 1, '*', size);
+        memset(shm_memory + 1, '*', msg_size);
 
         shm_notify(guard, 'c');
         shm_wait(guard, 's');
 
-        memcpy(buf, shm_memory + 1, size);
+        memcpy(buf, shm_memory + 1, msg_size);
     }
 
     printf("shm server test loops done\n");
@@ -32,8 +32,8 @@ void run_server(char *shm_memory, int size) {
     free(buf);
 }
 
-void run_client(char *shm_memory, int size) {
-    void *buf = malloc(size);
+void run_client(char *shm_memory, int msg_size, int msg_count) {
+    void *buf = malloc(msg_size);
 
     atomic_char *guard = (atomic_char *)shm_memory;
     atomic_init(guard, 's');
@@ -42,13 +42,13 @@ void run_client(char *shm_memory, int size) {
     printf("Start shm client test loops\n");
 
     // while (1) {
-    for (int i = 0; i < TEST_LOOPS; ++i) {
+    for (int i = 0; i < msg_count; ++i) {
         shm_wait(guard, 'c');
 
         // test
-        memcpy(buf, shm_memory + 1, size);
+        memcpy(buf, shm_memory + 1, msg_size);
 
-        memset(shm_memory + 1, '+', size);
+        memset(shm_memory + 1, '+', msg_size);
 
         shm_notify(guard, 's');
     }
