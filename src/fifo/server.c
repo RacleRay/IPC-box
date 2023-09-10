@@ -9,6 +9,30 @@
 
 #define FIFO_PATH "/tmp/ipc_fifo"
 
+void run_server(FILE* stream, int msg_size, int msg_count, struct sigaction *sa);
+FILE *open_fifo(const char *path);
+
+
+int main(int argc, char **argv) {
+    arguments_t args;
+    parse_arguments(&args, argc, argv);
+
+    // open fifo
+    FILE *stream = open_fifo(FIFO_PATH);
+
+    struct sigaction sa;
+    // block SIGUSR1, ignore SIGUSR2
+    sigset_t oset = setup_server_signals(&sa);
+
+    run_server(stream, args.msg_size, args.msg_count, &sa);
+
+    unlink(FIFO_PATH);
+    sigprocmask(SIG_SETMASK, &oset, NULL);
+
+    return 0;
+}
+
+
 void run_server(FILE* stream, int msg_size, int msg_count, struct sigaction *sa) {
     void* buf = malloc(msg_size);
 
@@ -47,23 +71,4 @@ FILE *open_fifo(const char *path) {
     }
 
     return stream;
-}
-
-int main(int argc, char **argv) {
-    arguments_t args;
-    parse_arguments(&args, argc, argv);
-
-    // open fifo
-    FILE *stream = open_fifo(FIFO_PATH);
-
-    struct sigaction sa;
-    // block SIGUSR1, ignore SIGUSR2
-    sigset_t oset = setup_server_signals(&sa);
-
-    run_server(stream, args.msg_size, args.msg_count, &sa);
-
-    unlink(FIFO_PATH);
-    sigprocmask(SIG_SETMASK, &oset, NULL);
-
-    return 0;
 }

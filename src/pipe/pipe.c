@@ -7,7 +7,39 @@
 #include "utils.h"
 #include "signals.h"
 
-#define TEST_LOOPS 1000
+
+// open pipe
+FILE* open_stream(int file_descriptor[2], char mode, int endian);
+void run_server(int file_descriptor[2], int msg_size, int msg_count, pid_t client_pid);
+void run_client(int file_descriptor[2], int msg_size, int msg_count, pid_t server_pid);
+
+
+int main(int argc, char *argv[]) {
+    int pipefd[2];
+
+    struct arguments args;
+    parse_arguments(&args, argc, argv);
+
+    if (pipe(pipefd) < 0) {
+        err_sys("Can`t open pipe.");
+    }
+
+    // communitcate
+    pid_t pid = fork();
+    if (pid < 0) {
+        err_sys("Can`t fork process");
+    }
+
+    if (pid == 0) { // child
+        run_client(pipefd, args.msg_size, args.msg_count, getppid());
+    }
+
+    // parent
+    run_server(pipefd, args.msg_size, args.msg_count, pid);
+
+    wait(NULL);
+    return 0;
+}
 
 
 // open pipe
@@ -93,32 +125,4 @@ void run_client(int file_descriptor[2], int msg_size, int msg_count, pid_t serve
     sigprocmask(SIG_SETMASK, &oset, NULL);
     close(file_descriptor[0]);
     free(buf);
-}
-
-
-int main(int argc, char *argv[]) {
-    int pipefd[2];
-
-    struct arguments args;
-    parse_arguments(&args, argc, argv);
-
-    if (pipe(pipefd) < 0) {
-        err_sys("Can`t open pipe.");
-    }
-
-    // communitcate
-    pid_t pid = fork();
-    if (pid < 0) {
-        err_sys("Can`t fork process");
-    }
-
-    if (pid == 0) { // child
-        run_client(pipefd, args.msg_size, args.msg_count, getppid());
-    }
-
-    // parent
-    run_server(pipefd, args.msg_size, args.msg_count, pid);
-
-    wait(NULL);
-    return 0;
 }

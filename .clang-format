@@ -52,7 +52,7 @@ PointerAlignment: Right
 ReflowComments: true
 # RequiresClausePosition: OwnLine
 ShortNamespaceLines: 5
-SortIncludes:    false
+# SortIncludes:    false
 SortUsingDeclarations: false
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
