@@ -1,4 +1,14 @@
-# Hello world
+# IPC box
 
-如果这个模板有用，请点一个🌟吧！
-[Github Repo](https://github.com/Codesire-Deng/TemplateRepoCxx)
+- shm
+- pipe
+
+
+- shm_chat: is a local multi-user chatroom based on shm and mmap.
+```sh
+# server compiled and run in the build directory.
+./server
+
+# client compiled and run in the build directory.
+./client [client_id](1-100) [user_name]
+```
