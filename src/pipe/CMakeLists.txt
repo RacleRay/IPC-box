@@ -1,0 +1,1 @@
+add_executable(pipe_test pipe.c ../utils/signals.c ../utils/utils.c)
