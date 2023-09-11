@@ -9,6 +9,8 @@ add_subdirectory(shm_chat)
 add_subdirectory(pipe)
 add_subdirectory(fifo)
 add_subdirectory(mmap)
+add_subdirectory(mq)
+add_subdirectory(semaphore)
 
 
 # for each "src/x.cpp", generate target "x"

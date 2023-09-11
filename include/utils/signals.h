@@ -20,7 +20,4 @@ sigset_t setup_parent_signals();
 sigset_t setup_server_signals(struct sigaction *new_sa);
 sigset_t setup_client_signals(struct sigaction *new_sa);
 
-void client_once(int operation);
-void server_once(int operation);
-
 #endif
