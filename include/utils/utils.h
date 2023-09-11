@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <memory.h>
 #include <pthread.h>
@@ -59,5 +60,11 @@ void linebuf_set_prompt(line_buf_t *line_buf, char *prompt);
 void linebuf_get_char(line_buf_t *line_buf);
 void linebuf_print(line_buf_t *line_buf, char *fmt, ...);
 // =============================================================
+
+
+// === file ===
+int set_io_flag(int fd, int flag);
+// ============
+
 
 #endif

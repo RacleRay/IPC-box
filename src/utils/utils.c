@@ -25,10 +25,12 @@ void parse_arguments(arguments_t *args, int argc, char **argv) {
             case -1:
                 return;
             case 's':
-                args->msg_size = atoi(optarg);
+                // args->msg_size = atoi(optarg);
+                args->msg_size = (int)strtol(optarg, NULL, 10);
+
                 break;
             case 'c':
-                args->msg_count = atoi(optarg);
+                args->msg_count = (int)strtol(optarg, NULL, 10);
                 break;
             default:
                 continue;
@@ -82,6 +84,7 @@ static void err_doit(int errnoflag, int error, const char *fmt, va_list ap) {
 }
 
 
+// ===================================================================
 // non-canonical mode: each character of input is passed to terminal buffer immediately.
 struct termios* active_noncanonical_terminal_mode(struct termios* oldt_p) {
     struct termios newt;
@@ -164,4 +167,20 @@ void linebuf_print(line_buf_t *line_buf, char *fmt, ...) {
     off += snprintf(output + off, maxlen - off, "%s", line_buf->buf);
 
     write(STDOUT_FILENO, output, off);
+}
+
+
+// ===================================================================
+
+int set_io_flag(int fd, int flag) {
+    int old_flag = fcntl(fd, F_GETFL, 0);
+    if (old_flag < 0) {
+        return -1;
+    }
+
+    if (fcntl(fd, F_SETFL, old_flag | flag) < 0) {
+        return -1;
+    }
+
+    return 0;
 }

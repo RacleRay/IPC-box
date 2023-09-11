@@ -4,9 +4,17 @@
 #include <stdbool.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <time.h>
 
-struct timeval;
+#define SOCKET_PATH "/tmp/ipc_socket"
 
+#define SOCKET_BUFFER_SIZE 8192
 
+#define SEND 0
+#define RECV 1
+
+#define NONBLOCK 0
+
+void set_unsocket_buffer_size(int sockfd, int size, int direction);
 
 #endif
