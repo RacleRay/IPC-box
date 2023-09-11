@@ -24,7 +24,7 @@ You can run the executable programs which are at `build/src/xxx` directories.
 ## Practice
 
 
-- shm_chat: is a local multi-user chatroom based on shm and mmap.
+- [shm_chat](./src/shm_chat): is a local multi-user chatroom based on shm and mmap.
 ```sh
 # server compiled and run in the build directory.
 ./server
