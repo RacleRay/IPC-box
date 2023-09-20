@@ -82,8 +82,8 @@ int accept_connection(int sockfd, int nonblock) {
         err_sys("accept on server-side");
     }
 
-    set_unsocket_buffer_size(connfd, SOCKET_BUFFER_SIZE, SEND);
-    set_unsocket_buffer_size(connfd, SOCKET_BUFFER_SIZE, RECV);
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, SEND);
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, RECV);
 
     if (nonblock) {
         if (set_io_flag(connfd, nonblock) == -1) {

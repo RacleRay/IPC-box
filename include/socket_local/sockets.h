@@ -15,6 +15,6 @@
 
 #define NONBLOCK 0
 
-void set_unsocket_buffer_size(int sockfd, int size, int direction);
+void set_socket_buffer_size(int sockfd, int size, int direction);
 
 #endif

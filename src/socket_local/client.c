@@ -46,8 +46,8 @@ int create_connection(const char *socket_path, int nonblock) {
         err_sys("create connection on client side");
     }
 
-    set_unsocket_buffer_size(connfd, SOCKET_BUFFER_SIZE, SEND);
-    set_unsocket_buffer_size(connfd, SOCKET_BUFFER_SIZE, RECV);
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, SEND);
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, RECV);
 
     if (nonblock) {
         if (set_io_flag(connfd, nonblock) < 0) {

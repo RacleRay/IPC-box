@@ -10,7 +10,7 @@
 #endif
 
 
-void set_unsocket_buffer_size(int sockfd, int size, int direction) {
+void set_socket_buffer_size(int sockfd, int size, int direction) {
     // setsockopt and getsockopt are our friends.
     // clang-format off
     int ret_state = setsockopt(
