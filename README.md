@@ -1,6 +1,6 @@
 # IPC box
 
-- shm
+- shm (shm condition variables)
 - pipe
 - fifo
 - mmap

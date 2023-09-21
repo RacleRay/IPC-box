@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "shm.h"
+#include "shmsync.h"
 #include "utils.h"
 
 

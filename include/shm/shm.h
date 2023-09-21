@@ -16,12 +16,6 @@
 
 #define LAZY_TEST_KEY 0x6666
 
-// for synchronization
-struct sync {
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-};
-
 void run_server(char *shm_memory, int msg_size, int msg_count);
 void run_client(char *shm_memory, int msg_size, int msg_count);
 
