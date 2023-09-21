@@ -14,6 +14,7 @@ add_subdirectory(semaphore)
 add_subdirectory(socket_local)
 add_subdirectory(socket)
 add_subdirectory(shm_condition)
+add_subdirectory(eventfd)
 
 
 # for each "src/x.cpp", generate target "x"
