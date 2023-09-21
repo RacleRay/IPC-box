@@ -8,6 +8,7 @@
 - mq
 - socket local
 - socket
+- eventfd
 
 
 
