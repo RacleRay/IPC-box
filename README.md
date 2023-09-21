@@ -7,7 +7,7 @@
 - semaphore (shm with semaphore)
 - mq
 - socket local
-- socket [TODO]
+- socket
 
 
 

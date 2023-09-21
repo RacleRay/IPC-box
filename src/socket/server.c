@@ -126,6 +126,8 @@ void run_communicate(int connfd, int size, int count, int nonblock) {
     void *buf = malloc(size);
     memset(buf, 0, size);
 
+    printf("tcp socket server start.\n");
+
     for (int i = 0; i < count; i++) {
         if (send(connfd, buf, size, 0) < 0) {
             err_sys("server send.");
@@ -141,6 +143,8 @@ void run_communicate(int connfd, int size, int count, int nonblock) {
             err_sys("server recv.");
         }
     }
+
+    printf("tcp socket server end.\n");
 
     free(buf);
 }

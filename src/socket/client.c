@@ -107,6 +107,8 @@ void run_communication(int connfd, int size, int count, int nonblock) {
     void* buf = malloc(size);
     memset(buf, 0, size);
 
+    printf("tcp client start.\n");
+
     for (int i = 0; i < count; i++) {
         if (nonblock) {
             while (recv(connfd, buf, size, 0) < size) {
@@ -124,6 +126,8 @@ void run_communication(int connfd, int size, int count, int nonblock) {
             err_sys("client send()");
         }
     }
+
+    printf("tcp client end.\n");
 
     free(buf);
 }
