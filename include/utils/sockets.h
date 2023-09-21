@@ -16,5 +16,8 @@
 #define NONBLOCK 0
 
 void set_socket_buffer_size(int sockfd, int size, int direction);
+struct timeval get_socket_timeout(int socket_fd, int direction);
+double get_socket_timeout_seconds(int socket_fd, int direction);
+void set_socket_timeout(int socket_fd, struct timeval* timeout, int direction);
 
 #endif

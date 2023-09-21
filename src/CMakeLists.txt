@@ -12,6 +12,7 @@ add_subdirectory(mmap)
 add_subdirectory(mq)
 add_subdirectory(semaphore)
 add_subdirectory(socket_local)
+add_subdirectory(socket)
 
 
 # for each "src/x.cpp", generate target "x"

@@ -14,6 +14,7 @@
 #define PORT "8080"
 
 int create_listen_socket();
+void run_communicate(int connfd, int size, int count, int nonblock);
 
 
 int main(int argc, char *argv[]) {
@@ -33,7 +34,26 @@ int main(int argc, char *argv[]) {
     }
 
     // set socket buffer size.
-    set_socket_buffer_size(connfd, );
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, RECV);
+    set_socket_buffer_size(connfd, SOCKET_BUFFER_SIZE, SEND);
+
+    // set io flag
+    if (NONBLOCK) {
+        if (set_io_flag(connfd, O_NONBLOCK) < 0) {
+            err_sys("server set_io_flag.");
+        }
+    }
+
+    // maybe close the lsockfd, because we don't need it anymore for only one connection.
+    
+    // === communication 
+    run_communicate(connfd, args.msg_size, args.msg_count, NONBLOCK);
+
+    // clean up
+    close(lsockfd);
+    close(connfd);
+
+    return 0;
 }
 
 
@@ -56,13 +76,13 @@ int create_listen_socket() {
     // full the addrinfo structure.
     struct addrinfo *server_info = NULL;
     int ret_code = getaddrinfo(HOST, PORT, &hints, &server_info);
+    if (server_info == NULL) {
+        err_sys("Can`t find valid address.");
+    }
     if (ret_code != 0) {
         (void)fprintf(stderr, "getaddrinfo(): %s\n", gai_strerror(ret_code));
         freeaddrinfo(server_info);
         exit(EXIT_FAILURE);
-    }
-    if (server_info == NULL) {
-        err_sys("Can`t find valid address.");
     }
 
     // === Get valid address ===
@@ -88,6 +108,8 @@ int create_listen_socket() {
             close(sockfd);
             err_sys("server bind.");            
         }
+
+        break;
     }    
     
     // === Listen ===
@@ -97,4 +119,28 @@ int create_listen_socket() {
     }
 
     return sockfd;
+}
+
+
+void run_communicate(int connfd, int size, int count, int nonblock) {
+    void *buf = malloc(size);
+    memset(buf, 0, size);
+
+    for (int i = 0; i < count; i++) {
+        if (send(connfd, buf, size, 0) < 0) {
+            err_sys("server send.");
+        }
+
+        if (nonblock) {
+            while (recv(connfd, buf, size, 0) < size) {
+                if (errno != EAGAIN || errno != EWOULDBLOCK) {
+                    err_sys("nonblock server recv.");
+                }
+            }
+        } else if (recv(connfd, buf, size, 0) < 0) {
+            err_sys("server recv.");
+        }
+    }
+
+    free(buf);
 }
